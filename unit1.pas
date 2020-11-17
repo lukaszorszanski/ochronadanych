@@ -42,7 +42,6 @@ type
     lblLiczbaProb: TLabel;
     lblWyniki: TLabel;
     mmoWyniki: TMemo;
-    Timer1: TTimer;
     procedure btnInfoClick(Sender: TObject);
     procedure btnKoniecClick(Sender: TObject);
     procedure btnOdgadnijClick(Sender: TObject);
@@ -269,8 +268,9 @@ var
   dlugosc: SizeInt;
   zestawZnakow: TSArray;
   hasloWygenerowaneL, zestawZnakowL, index, i: Integer;
-  hasloZnalezione: String = '';
+  hasloZnalezione: String = 'aaaaaa';
   liczbaProb: Int64 = 0;
+  T0: Double;
 begin
   haslo := edtHaslo.Text;
   //dlugosc := StrToInt(edtDlugosc.Text);
@@ -323,7 +323,7 @@ begin
   hasloWygenerowaneL := Length(hasloWygenerowane);
   zestawZnakowL := Length(zestawZnakow);
 
-  Timer1.Enabled := True;
+  T0 := Now;
 
   repeat
     for i := 0 to hasloWygenerowaneL - 1 do
@@ -348,11 +348,16 @@ begin
       end;
 
     Inc(liczbaProb);
-    edtLiczbaProb.Text := IntToStr(liczbaProb);
+
+    if ((liczbaProb mod 500) = 0) then
+    begin
+      edtCzas.Text := FloatToStr((Time-T0)*24*60*60);
+      edtLiczbaProb.Text := IntToStr(liczbaProb);
+    end;
+
+    i := hasloZnalezione[0];
 
   until CompareArrays(hasloWygenerowane, hasloWprowadzone) = 1;
-
-  //Timer1.Enabled := False;
 
   for i := 0 to hasloWygenerowaneL - 1 do
     begin
@@ -446,4 +451,3 @@ end;
 
 
 end.
-
